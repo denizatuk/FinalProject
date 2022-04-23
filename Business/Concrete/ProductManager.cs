@@ -16,6 +16,18 @@ namespace Business.Concrete
             _productDal = productDal;
         }
 
+        public void Add(Product product)
+        {
+            _productDal.Add(product);
+            Console.WriteLine("Ürün Eklendi");
+        }
+
+        public void Delete(Product product)
+        {
+            _productDal.Delete(product);
+            Console.WriteLine("Ürün Silindi");
+        }
+
         public List<Product> GetAll()
         {
             //iş kodları var ise 
@@ -32,6 +44,12 @@ namespace Business.Concrete
         public List<Product> GetByUnitPrice(decimal min, decimal max)
         {
             return _productDal.GetAll(p => p.UnitPrice >= min && p.UnitPrice <= max);
+        }
+
+        public void Update(Product product)
+        {
+            _productDal.Update(product);
+            Console.WriteLine("Ürün Güncellendi");
         }
     }
 }
