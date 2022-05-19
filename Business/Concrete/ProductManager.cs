@@ -46,15 +46,15 @@ namespace Business.Concrete
 
         public IDataResult<List<Product>> GetAll()
         {
-            if (DateTime.Now.Hour != 4)
-            {
-                return new ErrorDataResult<List<Product>>(Messages.MaintenceTime);
-            }
-            else
-            {
-                return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductListed);
-            }
-            
+            //if (DateTime.Now.Hour != 4)
+            //{
+            //    return new ErrorDataResult<List<Product>>(Messages.MaintenceTime);
+            //}
+            //else
+            //{
+            //    return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductListed);
+            //}
+            return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductListed);
         }
 
         public IDataResult<List<Product>> GetAllByCategoryId(int id)
