@@ -13,6 +13,7 @@ namespace Business.Constants
         public static string ProductUpdated = "Ürün Güncellendi";
         public static string ProductListed = "Ürünler Listelendi";
         public static string MaintenceTime = "Sistem Bakımda";
-        
+        public static string ProductNameAlreadyExists = "Aynı Ürün Adına Sahip Bir Ürün Mevcut";
+        public static string ProductCountOfCategoryError = "Kategoriye Ürün Ekleme Sınırı Aşıldı";
     }
 }

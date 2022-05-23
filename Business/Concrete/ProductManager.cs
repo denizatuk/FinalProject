@@ -11,6 +11,7 @@ using Entities.DTOs;
 using FluentValidation;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Business.Concrete
@@ -19,21 +20,28 @@ namespace Business.Concrete
     {
         IProductDal _productDal;
 
+
+
         public ProductManager(IProductDal productDal)
         {
             _productDal = productDal;
         }
-         //Validation
+        //Validation
         [ValidationAspect(typeof(ProductValidator))]
+
         public IResult Add(Product product)
         {
+            if (CheckIfProductCountOfCategoryCorrect(product.CategoryId).Success)
+            {
+                if (CheckIfProductNameExists(product.ProductName).Success)
+                {
+                    _productDal.Add(product);
+                    return new SuccessResult(Messages.ProductAdded);
+                }
+                
+            }
+            return new ErrorResult();
            
-            
-            
-
-            _productDal.Add(product);
-            return new SuccessResult(Messages.ProductAdded);
-
         }
 
         public IResult Delete(Product product)
@@ -49,14 +57,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Product>> GetAll()
         {
-            //if (DateTime.Now.Hour != 4)
-            //{
-            //    return new ErrorDataResult<List<Product>>(Messages.MaintenceTime);
-            //}
-            //else
-            //{
-            //    return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductListed);
-            //}
+           
             return new SuccessDataResult<List<Product>>(_productDal.GetAll(), Messages.ProductListed);
         }
 
@@ -80,6 +81,23 @@ namespace Business.Concrete
             return new SuccessDataResult<List<ProductDetailDto>>(_productDal.GetProductDetails());
         }
 
-
+        private IResult CheckIfProductCountOfCategoryCorrect(int categoryId)
+        {
+            var result = _productDal.GetAll(p => p.CategoryId == categoryId).Count;
+            if (result >= 10)
+            {
+                return new ErrorResult(Messages.ProductCountOfCategoryError);
+            }
+            return new SuccessResult();
+        }
+        private IResult CheckIfProductNameExists(string productName)
+        {
+            var result = _productDal.GetAll(p => p.ProductName == productName).Any();
+            if (result)
+            {
+                return new ErrorResult(Messages.ProductNameAlreadyExists);
+            }
+            return new SuccessResult();
+        }
     }
 }
