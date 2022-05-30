@@ -58,7 +58,7 @@ namespace Business.Concrete
             _productDal.Update(product);
             return new SuccessResult(Messages.ProductUpdated);
         }
-
+        [CacheAspect]  //key,value pair
         public IDataResult<List<Product>> GetAll()
         {
 
